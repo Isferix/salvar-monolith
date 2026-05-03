@@ -1,0 +1,19 @@
+{
+  "name": "API Dev",
+  "dockerComposeFile": ["../../.deploy/docker-compose.dev.yml"],
+  "service": "api",
+  "workspaceFolder": "/code",
+  "shutdownAction": "none",
+  "updateRemoteUserUID": true,
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.debugpy",
+        "mouradghafiri.uv-vscode-extension",
+        "charliermarsh.ruff"
+      ]
+    }
+  }
+}

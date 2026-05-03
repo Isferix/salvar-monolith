@@ -1,0 +1,29 @@
+{
+  "folders": [
+    { "path": "." }
+  ],
+  "settings": {
+    "breadcrumbs.enabled": false,
+    "editor.minimap.enabled": false,
+
+    "files.exclude": {
+      "**/__pycache__": true,
+      "**/*.pyc": true,
+      "**/*.gitignore": true,
+      "**/*__init__.py": true,
+      ".devcontainer": true,
+      ".pytest_cache": true,
+      ".ruff_cache": true,
+      ".venv": true,
+      ".dockerignore": true,
+      ".gitignore": true,
+      ".python-version": true,
+      "alembic.ini": true,
+      "Dockerfile": true,
+      "Makefile": true,
+      "pyproject.toml": true,
+      "README.md": true,
+      "uv.lock": true
+    }
+  }
+}
