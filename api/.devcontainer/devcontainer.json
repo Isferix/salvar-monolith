@@ -4,7 +4,11 @@
   "service": "api",
   "workspaceFolder": "/code",
   "shutdownAction": "none",
-  "updateRemoteUserUID": true,
+  "updateRemoteUserUID": true,  
+  "mounts": [
+    "source=venv-volume,target=/opt/venv,type=volume"
+  ],
+  "postCreateCommand": "uv sync --all-groups --frozen --active",
 
   "customizations": {
     "vscode": {

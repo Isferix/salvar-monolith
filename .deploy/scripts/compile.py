@@ -6,6 +6,7 @@ from configparser import ConfigParser
 
 CONFIG_FILE = "config.ini"
 ENV_FILE = "./.deploy/.env"
+GLOBAL_ENVS_FILE = "./.env" # Para las variables default del .ini, para que puedan ser utilizadas por comandos superiores como Makefile o docker-compose
 
 
 def get_localhost():
@@ -62,9 +63,12 @@ def compile_env(injected_vars=None):
 
     print("Las variables para reemplazar son: ", variables)
     resolved = {}
-
+    defaults = {}
     # Resolver todas las secciones
     for section in parser.sections():
+        if section.lower() == "default":
+            defaults = {f"{section.upper()}_{key.upper()}": value for key, value in parser[section].items()}   
+            print("Las variables default son: ", defaults)
         for key, value in parser[section].items():
             resolved_key = f"{section.upper()}_{key.upper()}"
             resolved_value = substitute_vars(value, {**variables, **resolved})
@@ -81,6 +85,10 @@ def compile_env(injected_vars=None):
 
     print(f"✅ {ENV_FILE} generado correctamente.")
 
+    with open(GLOBAL_ENVS_FILE, "w") as f:
+        for key, value in defaults.items():
+            f.write(f"{key.removeprefix('DEFAULT_').upper()}={value}\n")
+    print(f"✅ {GLOBAL_ENVS_FILE} generado correctamente.")
 
 def substitute_vars(value, variables):
     """

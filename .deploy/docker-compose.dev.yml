@@ -4,37 +4,39 @@ services:
     build:
       context: ../api
       target: dev
+      ssh:
+        - default
     ports:
       - "${API_EXPOSE_PORT}:${API_INTERNAL_PORT}"
     volumes:
-      - ../api/server:/code/server
+      - ../api/src:/code/src
       - ../api/.vscode:/code/.vscode
     networks:
       - appnet
 
-  web:
-    container_name: "${WEB_CONTAINER_NAME}"
-    build:
-      context: ../web
-      target: dev
-    ports:
-      - "${WEB_EXPOSE_PORT}:${WEB_INTERNAL_PORT}"
-    depends_on:
-      - api
-    environment:
-      NODE_ENV: "dev"
-      PORT: "${WEB_INTERNAL_PORT}"
-      API_PORT: "${API_INTERNAL_PORT}"
-    volumes:
-      - ../web/server:/app/server
-      - ../web/.vscode:/app/.vscode
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.web.entrypoints=web,web-secure
-      - traefik.http.routers.web.rule=PathPrefix(`/`)
-      - traefik.http.services.web.loadbalancer.server.port=${WEB_INTERNAL_PORT}
-    networks:
-      - appnet
+  # web:
+  #   container_name: "${WEB_CONTAINER_NAME}"
+  #   build:
+  #     context: ../web
+  #     target: dev
+  #   ports:
+  #     - "${WEB_EXPOSE_PORT}:${WEB_INTERNAL_PORT}"
+  #   depends_on:
+  #     - api
+  #   environment:
+  #     NODE_ENV: "dev"
+  #     PORT: "${WEB_INTERNAL_PORT}"
+  #     API_PORT: "${API_INTERNAL_PORT}"
+  #   volumes:
+  #     - ../web/server:/app/server
+  #     - ../web/.vscode:/app/.vscode
+  #   labels:
+  #     - traefik.enable=true
+  #     - traefik.http.routers.web.entrypoints=web,web-secure
+  #     - traefik.http.routers.web.rule=PathPrefix(`/`)
+  #     - traefik.http.services.web.loadbalancer.server.port=${WEB_INTERNAL_PORT}
+  #   networks:
+  #     - appnet
 
   proxy:
     container_name: "${PROXY_CONTAINER_NAME}"
@@ -42,7 +44,7 @@ services:
     command:
       - --configFile=/etc/traefik/traefik.yml
     depends_on:
-      - monolith
+      - api
     ports:
       - "${PROXY_EXPOSE_PORT}:80"
       - "${PROXY_DASHBOARD_PORT}:8080"
