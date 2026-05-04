@@ -1,4 +1,4 @@
-ARG PYTHON_VERSION=3.13.13-alpine
+ARG PYTHON_VERSION=3.13.13-slim
 
 # ---------- BASE ----------
 FROM python:${PYTHON_VERSION} AS base
@@ -12,21 +12,31 @@ WORKDIR /code
 FROM base AS build
 ENV UV_PROJECT_ENVIRONMENT=/opt/venv 
 
-RUN apk add --no-cache git openssh-client
-# Install uv binary only for build stages
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    openssh-client \
+    && rm -rf /var/lib/apt/lists/*
+
+    # Install uv binary only for build stages
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 RUN mkdir -p -m 0700 ~/.ssh && \
     ssh-keyscan github.com >> ~/.ssh/known_hosts
-COPY pyproject.toml uv.lock ./
+
+    COPY pyproject.toml uv.lock ./
 RUN --mount=type=ssh uv sync --no-dev --frozen --no-cache
 COPY . .
 
 # ---------- DEVELOPMENT ----------
 FROM build AS dev
-RUN apk add --no-cache nano curl sqlite bash
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    nano \
+    curl \
+    sqlite3 \
+    bash \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN adduser -D -s /bin/sh vscode
+RUN useradd -m -s /bin/sh vscode
 RUN chown -R vscode:vscode /opt/venv /code
 USER vscode
 
@@ -37,7 +47,7 @@ CMD ["uv", "run", "uvicorn", "src.main:server", "--host", "0.0.0.0", "--reload",
 # ---------- RUNTIME (PROD) ----------
 FROM base AS runtime
 
-RUN adduser -D -u 10001 -s /bin/sh appuser
+RUN useradd -m -u 10001 -U -s /bin/sh appuser
 # Copy only the virtualenv and source code
 COPY --chown=appuser:appuser --from=build /opt/venv /opt/venv
 COPY --chown=appuser:appuser --from=build /code/src ./src

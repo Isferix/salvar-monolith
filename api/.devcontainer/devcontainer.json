@@ -9,6 +9,9 @@
     "source=venv-volume,target=/opt/venv,type=volume"
   ],
   "postCreateCommand": "uv sync --all-groups --frozen --active",
+  "containerEnv": {
+    "UV_CACHE_DIR": "/opt/venv/.uv_cache"
+  },
 
   "customizations": {
     "vscode": {
