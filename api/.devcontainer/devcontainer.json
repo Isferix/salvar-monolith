@@ -1,20 +1,24 @@
 {
-  "name": "API Dev",
+  "name": "API salvar-dev",
   "dockerComposeFile": ["../../.deploy/docker-compose.dev.yml"],
   "service": "api",
   "workspaceFolder": "/code",
   "shutdownAction": "none",
   "updateRemoteUserUID": true,  
   "mounts": [
-    "source=venv-volume,target=/opt/venv,type=volume"
+    // Volumen único para este proyecto específico
+    "source=venv-${localWorkspaceFolderBasename},target=/opt/venv,type=volume",
+    // Volumen global compartido para no descargar paquetes 2 veces
+    "source=uv-global-cache,target=/home/vscode/.cache/uv,type=volume"
   ],
   "postCreateCommand": "uv sync --all-groups --frozen --active",
-  "containerEnv": {
-    "UV_CACHE_DIR": "/opt/venv/.uv_cache"
-  },
-
   "customizations": {
     "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "python.defaultInterpreterPath": "/opt/venv/bin/python3.13",
+        "python.analysis.extraPaths": ["/code"]
+      },
       "extensions": [
         "ms-python.python",
         "ms-python.debugpy",

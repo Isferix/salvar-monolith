@@ -1,10 +1,11 @@
 #!/bin/bash
 
 echo "🔍 Verificando entorno"
-if [ ! -f "./.deploy/.env" ]; then
-  echo "Compilando proyecto"
-  make up
-fi
+make compile
+# if [ -z "$(docker compose -f .deploy/docker-compose.dev.yml ps -q)" ]; then
+#   echo "Compilando proyecto"
+#   make up
+# fi
 
 echo "🐳 Preparando devcontainers..."
 

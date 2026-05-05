@@ -67,7 +67,7 @@ def compile_env(injected_vars=None):
     # Resolver todas las secciones
     for section in parser.sections():
         if section.lower() == "default":
-            defaults = {f"{section.upper()}_{key.upper()}": value for key, value in parser[section].items()}   
+            defaults = {key.upper(): value for key, value in parser[section].items()}
             print("Las variables default son: ", defaults)
         for key, value in parser[section].items():
             resolved_key = f"{section.upper()}_{key.upper()}"
@@ -81,7 +81,7 @@ def compile_env(injected_vars=None):
     # Guardar en .env
     with open(ENV_FILE, "w") as f:
         for key, value in resolved.items():
-            f.write(f"{key}={value}\n")
+            f.write(f"{key.removeprefix('DEFAULT_')}={value}\n")
 
     print(f"✅ {ENV_FILE} generado correctamente.")
 

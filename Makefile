@@ -8,6 +8,12 @@ COMPOSE_FILE := .deploy/docker-compose.dev.yml
 GITHUB_SSH_KEY := $(GITHUB_SSH_KEY_PATH)
 export GITHUB_SSH_KEY
 
+PROJECT_NAME := $(PROJECT_NAME)
+export PROJECT_NAME
+
+COMPOSE_PROJECT_NAME := $(PROJECT_NAME)-compose
+export COMPOSE_PROJECT_NAME
+
 .PHONY: up down logs ps rebuild test-deploy
 
 # define run_with_agent
@@ -29,20 +35,20 @@ secrets:
 	$(PYTHON) $(SECRETS_SCRIPT)
 	
 up: compile
-	$(call run_with_agent, docker compose -f $(COMPOSE_FILE) up -d --build)
+	$(call run_with_agent, docker compose -p $(COMPOSE_PROJECT_NAME) -f $(COMPOSE_FILE) up -d --build)
 
 down:
-	docker compose -f $(COMPOSE_FILE) down
+	docker compose -p $(COMPOSE_PROJECT_NAME) -f $(COMPOSE_FILE) down
 
 logs:
-	docker compose -f $(COMPOSE_FILE) logs -f
+	docker compose -p $(COMPOSE_PROJECT_NAME) -f $(COMPOSE_FILE) logs -f
 
 ps:
-	docker compose -f $(COMPOSE_FILE) ps
+	docker compose -p $(COMPOSE_PROJECT_NAME) -f $(COMPOSE_FILE) ps
 
 rebuild: compile render-env
-	docker compose -f $(COMPOSE_FILE) up -d --build --force-recreate
+	docker compose -p $(COMPOSE_PROJECT_NAME) -f $(COMPOSE_FILE) up -d --build --force-recreate
 
 test-deploy: compile render-env
-	$(call run_with_agent, docker compose -f .deploy/docker-compose.prod.local.yml build)
-	docker compose -f .deploy/docker-compose.prod.local.yml up -d
+	$(call run_with_agent, docker compose -p $(PROJECT_NAME)-prod -f .deploy/docker-compose.prod.local.yml build)
+	docker compose -p $(PROJECT_NAME)-prod -f .deploy/docker-compose.prod.local.yml up -d

@@ -1,4 +1,4 @@
-ARG PYTHON_VERSION=3.13.13-slim
+ARG PYTHON_VERSION=3.13-slim
 
 # ---------- BASE ----------
 FROM python:${PYTHON_VERSION} AS base
@@ -10,6 +10,7 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /code
 
 FROM base AS build
+
 ENV UV_PROJECT_ENVIRONMENT=/opt/venv 
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -29,15 +30,13 @@ COPY . .
 
 # ---------- DEVELOPMENT ----------
 FROM build AS dev
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    nano \
-    curl \
-    sqlite3 \
-    bash \
-    && rm -rf /var/lib/apt/lists/*
-
 RUN useradd -m -s /bin/sh vscode
-RUN chown -R vscode:vscode /opt/venv /code
+
+ENV UV_LINK_MODE=copy
+ENV UV_CACHE_DIR=/home/vscode/.cache/uv
+RUN mkdir -p /home/vscode/.cache/uv
+
+RUN chown -R vscode:vscode /opt/venv /code /home/vscode/.cache/uv
 USER vscode
 
 EXPOSE 8000
