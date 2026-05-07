@@ -1,0 +1,29 @@
+{
+  "name": "WEB salvar-dev",
+  "dockerComposeFile": ["../../.deploy/docker-compose.dev.yml"],
+  "service": "web",
+  "workspaceFolder": "/app",
+  "shutdownAction": "none",
+  "updateRemoteUserUID": true,
+  // "containerEnv": {
+  //   "COREPACK_ENABLE_DOWNLOAD_PROMPT": "0"
+  // },
+  "mounts": [
+    "source=node_modules-${localWorkspaceFolderBasename},target=/app/node_modules,type=volume"
+  ],
+  "customizations": {
+    "settings": {
+      "terminal.integrated.defaultProfile.linux": "bash",
+      "eslint.workingDirectories": ["/app"],
+      "prettier.requireConfig": true
+    },  
+    "vscode": {
+      "extensions": [
+        "svelte.svelte-vscode", // Svelte
+        "dbaeumer.vscode-eslint", // ESLint
+        "esbenp.prettier-vscode", // Prettier
+        "antfu.vite" // Vite
+      ]
+    }
+  }
+}

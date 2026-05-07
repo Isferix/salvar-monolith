@@ -16,13 +16,6 @@ export COMPOSE_PROJECT_NAME
 
 .PHONY: up down logs ps rebuild test-deploy
 
-# define run_with_agent
-# 	@export $$(cat .env | xargs) && \
-# 	eval "$$(ssh-agent -s)" && \
-# 	ssh-add $(GITHUB_SSH_KEY_PATH) && \
-# 	$(1) && \
-# 	eval "$$(ssh-agent -k)"
-# endef
 define run_with_agent
 	@ssh-add $(GITHUB_SSH_KEY_PATH) 2>/dev/null || true; \
 	$(1)
