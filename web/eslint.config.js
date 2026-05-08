@@ -1,12 +1,15 @@
 import js from "@eslint/js";
 import globals from "globals";
+
 import pluginPrettier from "eslint-plugin-prettier";
 import configPrettier from "eslint-config-prettier";
-import pluginHtml from "eslint-plugin-html";
-import pluginJinja from "eslint-plugin-jinja";
+
+import html from "@html-eslint/eslint-plugin";
+
 import { defineConfig, globalIgnores } from "eslint/config";
 
 export default defineConfig([
+
   globalIgnores([
     "node_modules",
     "dist",
@@ -14,17 +17,15 @@ export default defineConfig([
     "coverage"
   ]),
 
+  // ------------------------
+  // JAVASCRIPT
+  // ------------------------
   {
-    files: ["**/*.js", "**/*.html", "**/*.jinja"],
+    files: ["**/*.js"],
+
     plugins: {
       prettier: pluginPrettier,
-      html: pluginHtml,
-      jinja: pluginJinja
-    },
-
-    settings: {
-      "jinja/extensions": [".html", ".js"],
-      "html/html-extensions": [".html"]
+      html
     },
 
     extends: [
@@ -37,28 +38,57 @@ export default defineConfig([
       sourceType: "module",
       globals: {
         ...globals.browser,
-        ...globals.es2021,
-        Bun: "readonly"
+        ...globals.es2021
       }
     },
 
     rules: {
       "prettier/prettier": "error",
 
+      // HTML dentro de template literals
+      "html/require-img-alt": "error",
+
       "no-console": "off",
-      "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+      "no-unused-vars": ["warn", {
+        argsIgnorePattern: "^_"
+      }],
       "no-undef": "error",
       "no-shadow": "error",
+      "no-magic-numbers": ["warn", {
+        ignore: [0, 1, -1]
+      }]
+    }
+  },
 
-      "eqeqeq": ["error", "always"],
-      "consistent-return": "warn",
+  // ------------------------
+  // HTML
+  // ------------------------
+  {
+    files: ["**/*.html"],
 
-      "indent": ["error", 2],
-      "quotes": ["error", "double"],
-      "semi": ["error", "always"],
+    plugins: {
+      html,
+      prettier: pluginPrettier
+    },
 
-      "max-len": ["warn", { code: 120 }],
-      "no-magic-numbers": ["warn", { ignore: [0, 1, -1] }]
+    language: "html/html",
+
+    extends: [
+      "html/recommended",
+      configPrettier
+    ],
+
+    languageOptions: {
+      templateEngineSyntax: {
+        "{{": "}}"
+      }
+    },
+
+    rules: {
+      "prettier/prettier": "error",
+
+      "html/require-img-alt": "error",
+      "html/no-duplicate-class": "error"
     }
   }
 ]);

@@ -1,5 +1,15 @@
 from typing import List, Optional
 
+from core.pydantic.common import (
+    Familiar,
+    FamiliarCargado,
+    FamiliarDesconocido,
+    FamiliarRelacion,
+    FamiliarTipo,
+    GrupoFamiliar,
+    Ubicacion,
+)
+from core.pydantic.ports import Persona
 from sqlalchemy import (
     JSON,
     Boolean,
@@ -12,17 +22,6 @@ from sqlalchemy import (
 )
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session, relationship
-
-from core.pydantic.common import (
-    Familiar,
-    FamiliarCargado,
-    FamiliarDesconocido,
-    FamiliarRelacion,
-    FamiliarTipo,
-    GrupoFamiliar,
-    Ubicacion,
-)
-from core.ports import Persona
 
 NAMING_CONVENTION = {
     "ix": "ix_%(column_0_label)s",

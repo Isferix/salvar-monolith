@@ -1,18 +1,18 @@
 from functools import lru_cache
 from typing import Literal
 
+from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
     env: Literal["development", "production"] = "development"
-    db_uri: str
     log_file: str = "app.log"
     echo_sql: bool = True
-    manifest_json_path: str = ""
+    db_uri: SecretStr
 
     model_config = SettingsConfigDict(
-        env_file="server/src/.env",
+        env_file=".env",
         env_file_encoding="utf-8",
         secrets_dir="/run/secrets",
         extra="ignore",

@@ -11,7 +11,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 # from pydantic import ValidationError
 # from .adapters.dtos import ErrorDTO
 # from core.error import DomainError, EtiquetaRepetida, RelacionErronean,
-from .dependencies import templates  # logger,
+from .dependencies import templates, logger
 
 U = TypeVar("U")
 V = TypeVar("V")
@@ -181,3 +181,9 @@ def render(
             context={**context, "page": page},
         ).body.decode("utf-8")  # type: ignore
     return HTMLResponse(content=html_content)
+
+
+async def reload_templates():
+    logger.info("Reloading Jinja2 templates...")
+    templates.env.cache = {}
+    logger.info("Jinja2 templates reloaded.")

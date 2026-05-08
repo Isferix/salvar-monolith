@@ -1,7 +1,7 @@
 #!/bin/bash
 
-echo "🔍 Verificando entorno"
-make compile
+# echo "🔍 Verificando entorno"
+# make compile
 
 echo "🐳 Preparando devcontainers..."
 make up

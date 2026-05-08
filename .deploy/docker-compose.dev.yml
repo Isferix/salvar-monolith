@@ -37,6 +37,7 @@ services:
       - "${API_EXPOSE_PORT}:${API_INTERNAL_PORT}"
     environment:
       - DB_URI=postgresql://${DB_POSTGRES_USER}:${DB_POSTGRES_PASSWORD}@db:${DB_INTERNAL_PORT}/${DB_POSTGRES_DB}
+      - environment=development
     volumes:
       - ../api/src:/code/src
       - ../api/.vscode:/code/.vscode
