@@ -2,6 +2,8 @@ import js from "@eslint/js";
 import globals from "globals";
 import pluginPrettier from "eslint-plugin-prettier";
 import configPrettier from "eslint-config-prettier";
+import pluginHtml from "eslint-plugin-html";
+import pluginJinja from "eslint-plugin-jinja";
 import { defineConfig, globalIgnores } from "eslint/config";
 
 export default defineConfig([
@@ -13,9 +15,16 @@ export default defineConfig([
   ]),
 
   {
-    files: ["**/*.js"],
+    files: ["**/*.js", "**/*.html", "**/*.jinja"],
     plugins: {
-      prettier: pluginPrettier
+      prettier: pluginPrettier,
+      html: pluginHtml,
+      jinja: pluginJinja
+    },
+
+    settings: {
+      "jinja/extensions": [".html", ".js"],
+      "html/html-extensions": [".html"]
     },
 
     extends: [
@@ -27,7 +36,7 @@ export default defineConfig([
       ecmaVersion: "latest",
       sourceType: "module",
       globals: {
-        ...globals.node,
+        ...globals.browser,
         ...globals.es2021,
         Bun: "readonly"
       }
