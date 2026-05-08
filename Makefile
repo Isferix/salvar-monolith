@@ -34,11 +34,11 @@ web-up:
 
 up: compile
 	$(MAKE) api-up
-	$(MAKE) web-up
+# 	$(MAKE) web-up
 
 down:
 	devcontainer down --workspace-folder $(API_WORKSPACE)
-	devcontainer down --workspace-folder $(WEB_WORKSPACE)
+# 	devcontainer down --workspace-folder $(WEB_WORKSPACE)
 
 rebuild: compile
 	devcontainer build --workspace-folder $(API_WORKSPACE) --no-cache
