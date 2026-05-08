@@ -7,7 +7,7 @@ from alembic import context
 # -------------------------------------------------
 # Agregar raíz del proyecto al path
 # -------------------------------------------------
-BASE_DIR = Path(__file__).resolve().parents[4]
+BASE_DIR = Path(__file__).resolve().parents[3]
 sys.path.append(str(BASE_DIR))
 
 from src.infrastructure.db.engine import engine, Base

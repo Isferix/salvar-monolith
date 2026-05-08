@@ -67,7 +67,8 @@
         });
       }
     </script> -->
+    {% if is_dev %}
     <!-- Hot reload script -->
-    {% if env == "development" %} {{ hot_reload.script(url_for('hot-reload')) | safe }} {% endif %}
+    {{ hot_reload.script(url_for('hot-reload')) | safe }} {% endif %}
   </body>
 </html>
