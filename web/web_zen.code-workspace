@@ -8,7 +8,6 @@
       "**/.git": true,
       "**/.DS_Store": true,
       "**/node_modules": true,
-      ".devcontainer": true,
       ".dockerignore": true,
       ".gitignore": true,
     //   ".prettierrc.json": true,

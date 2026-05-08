@@ -12,6 +12,7 @@
   ], 
   "shutdownAction": "none",
   "updateRemoteUserUID": true,
+  "remoteUser": "node",
   "customizations": {
     "vscode": {
       "extensions": [

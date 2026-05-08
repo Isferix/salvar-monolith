@@ -25,7 +25,7 @@
       "README.md": true,
       "uv.lock": true,
 
-      "web": true
+      // "web": true
     }
   }
 }

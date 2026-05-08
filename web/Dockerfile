@@ -1,11 +1,8 @@
 FROM node:22-alpine
 
+WORKDIR /workspace
+
 RUN corepack enable && corepack prepare pnpm@latest --activate
 RUN pnpm add eslint eslint-plugin-jinja eslint-plugin-html prettier
  
-WORKDIR /workspace
-RUN adduser -D vscode
-RUN mkdir -p /workspace && chown -R vscode:vscode /workspace
-RUN echo "vscode ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-
-USER vscode
+USER node
