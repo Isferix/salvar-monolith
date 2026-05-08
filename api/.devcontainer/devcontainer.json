@@ -15,7 +15,7 @@
   "remoteEnv": {
     "SSH_AUTH_SOCK": "/ssh-agent"
   },
-  "postCreateCommand": "uv sync --all-groups --frozen --active",
+  "postCreateCommand": "uv sync --all-groups --frozen --inexact",
   "customizations": {
     "vscode": {
       "settings": {

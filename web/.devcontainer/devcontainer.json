@@ -6,8 +6,6 @@
   "workspaceFolder": "/workspace",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
   "mounts": [
-    "source=/etc/passwd,target=/etc/passwd:ro,type=bind,consistency=cached",
-    "source=/etc/group,target=/etc/group:ro,type=bind,consistency=cached",
     "source=pnpm-volumen,target=${localWorkspaceFolder}/node_modules,type=volume"
   ], 
   "shutdownAction": "none",

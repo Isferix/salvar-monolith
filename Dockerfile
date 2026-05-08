@@ -27,6 +27,7 @@ RUN mkdir -p -m 0700 ~/.ssh && \
 
     COPY ./api/pyproject.toml ./api/uv.lock ./
 RUN --mount=type=ssh uv sync --no-dev --frozen --no-cache
+RUN uv pip install "psycopg[binary]"
 
 # ---------- DEVELOPMENT ----------
 FROM build AS dev
