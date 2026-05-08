@@ -13,7 +13,6 @@ from core.pydantic.ports import Persona
 from sqlalchemy import (
     JSON,
     Boolean,
-    Column,
     ForeignKey,
     Integer,
     MetaData,
@@ -21,7 +20,7 @@ from sqlalchemy import (
     select,
 )
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import Session, relationship
+from sqlalchemy.orm import Mapped, Session, mapped_column, relationship
 
 NAMING_CONVENTION = {
     "ix": "ix_%(column_0_label)s",
@@ -38,14 +37,16 @@ Base = declarative_base(metadata=MetaData(naming_convention=NAMING_CONVENTION))
 class PersonaDAO(Base):
     __tablename__ = "persona"
 
-    id = Column(Integer, primary_key=True)
-    dni = Column(String, unique=True, index=True)
-    nombre = Column(String, default=None)
-    apellido = Column(String, default=None)
-    extranjero = Column(Boolean, default=False)
-    family_owner = Column(Boolean, default=False)
-    cargado_en_caritas = Column(Boolean, default=False)
-    descripcion = Column(String, nullable=True, default=None)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    dni: Mapped[str] = mapped_column(String, unique=True, index=True)
+    nombre: Mapped[Optional[str]] = mapped_column(String, default=None)
+    apellido: Mapped[Optional[str]] = mapped_column(String, default=None)
+    extranjero: Mapped[bool] = mapped_column(Boolean, default=False)
+    family_owner: Mapped[bool] = mapped_column(Boolean, default=False)
+    cargado_en_caritas: Mapped[bool] = mapped_column(Boolean, default=False)
+    descripcion: Mapped[Optional[str]] = mapped_column(
+        String, nullable=True, default=None
+    )
 
     ubicacion = relationship(
         "UbicacionDim",
@@ -66,16 +67,16 @@ class PersonaDAO(Base):
     @classmethod
     def from_domain(cls, persona: Persona) -> "PersonaDAO":
         return cls(
-            id=persona.id,  # type: ignore
-            dni=persona.dni,  # type: ignore
-            nombre=persona.nombre,  # type: ignore
-            apellido=persona.apellido,  # type: ignore
-            extranjero=persona.extranjero,  # type: ignore
-            family_owner=persona.family_owner,  # type: ignore
-            cargado_en_caritas=persona.cargado_en_caritas,  # type: ignore
-            descripcion=persona.descripcion,  # type: ignore
-            ubicacion=UbicacionDim.from_domain(persona.ubicacion),  # type: ignore
-            grupo_familiar=(  # type: ignore
+            id=persona.id,
+            dni=persona.dni,
+            nombre=persona.nombre,
+            apellido=persona.apellido,
+            extranjero=persona.extranjero,
+            family_owner=persona.family_owner,
+            cargado_en_caritas=persona.cargado_en_caritas,
+            descripcion=persona.descripcion,
+            ubicacion=UbicacionDim.from_domain(persona.ubicacion),
+            grupo_familiar=(
                 GrupoFamiliarDim.from_domain(persona.grupo_familiar)
                 if persona.grupo_familiar
                 else None
@@ -102,12 +103,12 @@ class PersonaDAO(Base):
 class UbicacionDim(Base):
     __tablename__ = "ubicacion"
 
-    id = Column(Integer, primary_key=True)
-    persona_id = Column(
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    persona_id: Mapped[int] = mapped_column(
         Integer, ForeignKey("persona.id", ondelete="CASCADE"), unique=True
     )
-    direccion = Column(String, nullable=True)
-    localidad = Column(String, nullable=True)
+    direccion: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    localidad: Mapped[Optional[str]] = mapped_column(String, nullable=True)
 
     persona = relationship("PersonaDAO", back_populates="ubicacion")
 
@@ -122,14 +123,14 @@ class UbicacionDim(Base):
 class GrupoFamiliarDim(Base):
     __tablename__ = "grupo_familiar"
 
-    id = Column(Integer, primary_key=True)
-    persona_id = Column(
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    persona_id: Mapped[int] = mapped_column(
         Integer,
         ForeignKey("persona.id", ondelete="CASCADE"),
         unique=True,
         nullable=False,
     )
-    cantidad = Column(Integer)
+    cantidad: Mapped[int]
 
     persona = relationship("PersonaDAO", back_populates="grupo_familiar")
     miembros = relationship(
@@ -144,12 +145,12 @@ class GrupoFamiliarDim(Base):
         instance = cls(cantidad=grupo_familiar.cantidad)  # type: ignore
         instance.miembros = [
             MiembroGrupoFamiliar(
-                tipo=miembro.tipo,  # type: ignore
-                relacion=miembro.relacion,  # type: ignore
-                descripcion=miembro.descripcion,  # type: ignore
-                datos=miembro.__dict__,  # type: ignore
+                tipo=miembro.tipo,
+                relacion=miembro.relacion,
+                descripcion=miembro.descripcion,
+                datos=miembro.__dict__,
             )
-            for miembro in grupo_familiar.familiares  # type: ignore
+            for miembro in grupo_familiar.familiares
         ]
         return instance
 
@@ -164,16 +165,16 @@ class GrupoFamiliarDim(Base):
 class MiembroGrupoFamiliar(Base):
     __tablename__ = "miembro_grupo_familiar"
 
-    id = Column(Integer, primary_key=True)
-    grupo_id = Column(
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    grupo_id: Mapped[int] = mapped_column(
         Integer,
         ForeignKey("grupo_familiar.id", ondelete="CASCADE"),
         nullable=False,
     )
-    tipo = Column(String, nullable=False)
-    relacion = Column(String, nullable=True)
-    descripcion = Column(String, nullable=True)
-    datos = Column(JSON)
+    tipo: Mapped[str] = mapped_column(String, nullable=False)
+    relacion: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    descripcion: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    datos: Mapped[dict] = mapped_column(JSON)
 
     grupo = relationship("GrupoFamiliarDim", back_populates="miembros")
 

@@ -10,8 +10,9 @@ from alembic import context
 BASE_DIR = Path(__file__).resolve().parents[3]
 sys.path.append(str(BASE_DIR))
 
-from src.infrastructure.db.engine import engine, Base
+from src.infrastructure.db.engine import Base, engine
 from src.settings import get_settings
+
 # from import server.adapters.orm
 
 settings = get_settings()

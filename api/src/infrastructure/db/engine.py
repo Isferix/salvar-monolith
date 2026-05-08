@@ -8,11 +8,12 @@ from ...settings import get_settings
 settings = get_settings()
 
 engine = create_engine(
-    str(settings.db_uri),
+    settings.db_uri.get_secret_value(),
     echo=settings.echo_sql,
-    connect_args={"check_same_thread": False},
+    pool_size=10,
+    max_overflow=10,
+    pool_recycle=3600,
 )
-
 
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
