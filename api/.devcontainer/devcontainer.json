@@ -9,8 +9,12 @@
     // Volumen único para este proyecto específico
     "source=venv-${localWorkspaceFolderBasename},target=/opt/venv,type=volume",
     // Volumen global compartido para no descargar paquetes 2 veces
-    "source=uv-global-cache,target=/home/vscode/.cache/uv,type=volume"
+    "source=uv-global-cache,target=/home/vscode/.cache/uv,type=volume",
+    "source=${localEnv:SSH_AUTH_SOCK},target=/ssh-agent,type=bind"
   ],
+  "remoteEnv": {
+    "SSH_AUTH_SOCK": "/ssh-agent"
+  },
   "postCreateCommand": "uv sync --all-groups --frozen --active",
   "customizations": {
     "vscode": {
@@ -21,9 +25,10 @@
       },
       "extensions": [
         "ms-python.python",
+        "wholroyd.jinja",
         "ms-python.debugpy",
         "mouradghafiri.uv-vscode-extension",
-        "charliermarsh.ruff"
+        "charliermarsh.ruff",
       ]
     }
   }

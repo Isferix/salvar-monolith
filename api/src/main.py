@@ -1,14 +1,18 @@
 from fastapi import FastAPI
-from inertia import (
-    InertiaVersionConflictException,
-    inertia_version_conflict_exception_handler,
-)
-
-from .endpoints.api import api
-
+from fastapi.staticfiles import StaticFiles
+# from .endpoints.api import api
+from .endpoints.web import web
 server = FastAPI()
-server.add_exception_handler(
-    InertiaVersionConflictException, inertia_version_conflict_exception_handler
+server.mount(
+    "/static",
+    StaticFiles(directory="web/static"),
+    name="assets",
 )
 
-server.include_router(api)
+server.mount(
+    "/components",
+    StaticFiles(directory="web/components"),
+    name="components",
+)
+# server.include_router(api, prefix="/api")
+server.include_router(web)

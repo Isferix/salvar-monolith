@@ -1,7 +1,22 @@
 {
-    "folders": [
-        {
-            "path": "."
-        }
-    ]
+  "folders": [{ "path": "." }],
+  "settings": {
+    "breadcrumbs.enabled": false,
+    "editor.minimap.enabled": false,
+
+    "files.exclude": {
+      "**/.git": true,
+      "**/.DS_Store": true,
+      "**/node_modules": true,
+      ".devcontainer": true,
+      ".dockerignore": true,
+      ".gitignore": true,
+    //   ".prettierrc.json": true,
+      "Dockerfile": true,
+    //   "eslint.config.js": true,
+      "package.json": true,
+      "pnpm-lock.yaml": true,
+      "pnpm-workspace.yaml": true,
+    },
+  },
 }

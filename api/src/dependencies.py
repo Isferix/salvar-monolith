@@ -1,11 +1,11 @@
 from typing import Annotated
 
 from fastapi import Depends
-from inertia import Inertia
+from fastapi.templating import Jinja2Templates
 
-from .infrastructure.inertia import inertia_dependency
+from .infrastructure.jinja import get_templates
 from .infrastructure.logger import setup_logger
 
 logger = setup_logger("server")
 
-InertiaDependency = Annotated[Inertia, Depends(inertia_dependency)]
+TemplatesDependency = Annotated[Jinja2Templates, Depends(get_templates)]

@@ -6,7 +6,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     env: Literal["development", "production"] = "development"
-    database_uri: str
+    db_uri: str
     log_file: str = "app.log"
     echo_sql: bool = True
     manifest_json_path: str = ""
