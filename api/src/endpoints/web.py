@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 
-from ..utils import render, renderBase
+from ..utils.responses import render, renderBase
 
 web = APIRouter()
 

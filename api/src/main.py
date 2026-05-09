@@ -5,7 +5,7 @@ from .endpoints.api import api
 from .endpoints.web import web
 from .infrastructure.jinja import templates
 from .settings import get_settings
-from .utils import reload_templates
+from .utils.extra import reload_templates
 
 settings = get_settings()
 is_dev = settings.env == "development"
