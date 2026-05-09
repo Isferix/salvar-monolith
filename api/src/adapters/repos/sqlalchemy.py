@@ -9,7 +9,7 @@ from core.pydantic.common import (
     Ubicacion,
     familiar_adapter,
 )
-from core.pydantic.ports import Persona
+from core.pydantic.ports import Persona, PersonasRepository
 from sqlalchemy import (
     JSON,
     Enum,
@@ -20,7 +20,7 @@ from sqlalchemy import (
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Mapped, Session, mapped_column, relationship
 
-from ..utils.mappers import map_model_to_orm
+from ...utils.mappers import map_model_to_orm
 
 NAMING_CONVENTION = {
     "ix": "ix_%(column_0_label)s",
@@ -171,7 +171,7 @@ class MiembroGrupoFamiliar(Base):
         return familiar_adapter.validate_python(self)
 
 
-class SqlAlchemyPersonasRepository:
+class SqlAlchemyPersonasRepository(PersonasRepository):
     def __init__(self, db: Session):
         self.db = db
 
