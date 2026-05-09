@@ -21,7 +21,7 @@ dev = [
 ]
 
 [tool.uv.sources]
-salvar-core = { git = "ssh://git@github.com/Isferix/salvar-core.git", rev = "v0.2.0" }
+salvar-core = { git = "ssh://git@github.com/Isferix/salvar-core.git", rev = "v0.3.0" }
 
 [tool.ruff]
 lint.extend-select = [
