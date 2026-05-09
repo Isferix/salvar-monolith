@@ -1,4 +1,4 @@
-from typing import Optional, Self
+from typing import Self
 
 from core.pydantic.common import (
     Familiar,
@@ -49,7 +49,7 @@ class PersonaDAO(Base):
     cargado_en_caritas: Mapped[bool] = mapped_column(default=False)
     descripcion: Mapped[str | None] = mapped_column(default=None)
 
-    ubicacion = relationship(
+    ubicacion: Mapped["UbicacionDim | None"] = relationship(
         "UbicacionDim",
         back_populates="persona",
         uselist=False,
@@ -57,7 +57,7 @@ class PersonaDAO(Base):
         cascade="all, delete-orphan",
     )
 
-    grupo_familiar = relationship(
+    grupo_familiar: Mapped["GrupoFamiliarDim | None"] = relationship(
         "GrupoFamiliarDim",
         back_populates="persona",
         uselist=False,
@@ -97,7 +97,9 @@ class UbicacionDim(Base):
     direccion: Mapped[str | None] = mapped_column(default=None)
     localidad: Mapped[str | None] = mapped_column(default=None)
 
-    persona = relationship("PersonaDAO", back_populates="ubicacion")
+    persona: Mapped["PersonaDAO"] = relationship(
+        "PersonaDAO", back_populates="ubicacion"
+    )
 
     @classmethod
     def from_domain(cls, ubicacion: "Ubicacion") -> "UbicacionDim":
@@ -118,8 +120,10 @@ class GrupoFamiliarDim(Base):
     )
     cantidad: Mapped[int]
 
-    persona = relationship("PersonaDAO", back_populates="grupo_familiar")
-    miembros = relationship(
+    persona: Mapped["PersonaDAO"] = relationship(
+        "PersonaDAO", back_populates="grupo_familiar"
+    )
+    miembros: Mapped[list["MiembroGrupoFamiliar"]] = relationship(
         "MiembroGrupoFamiliar",
         back_populates="grupo",
         cascade="all, delete-orphan",
@@ -159,7 +163,9 @@ class MiembroGrupoFamiliar(Base):
     descripcion: Mapped[str] = mapped_column(default="")
     datos: Mapped[dict] = mapped_column(JSON)
 
-    grupo = relationship("GrupoFamiliarDim", back_populates="miembros")
+    grupo: Mapped["GrupoFamiliarDim"] = relationship(
+        "GrupoFamiliarDim", back_populates="miembros"
+    )
 
     @classmethod
     def from_domain(cls, familiar: Familiar) -> "MiembroGrupoFamiliar":
@@ -201,11 +207,11 @@ class SqlAlchemyPersonasRepository:
         result = self.db.execute(stmt).scalars().all()
         return [dao.to_domain() for dao in result]
 
-    def get_by_id(self, id: int) -> Optional[Persona]:
+    def get_by_id(self, id: int) -> Persona | None:
         dao: PersonaDAO = self.db.get(PersonaDAO, id)
         return dao.to_domain() if dao else None
 
-    def get_by_dni(self, dni: str) -> Optional[Persona]:
+    def get_by_dni(self, dni: str) -> Persona | None:
         stmt = select(PersonaDAO).where(PersonaDAO.dni == dni)
         dao: PersonaDAO = self.db.execute(stmt).scalars().first()
         return dao.to_domain() if dao else None
@@ -216,36 +222,26 @@ class SqlAlchemyPersonasRepository:
         if not existing:
             raise ValueError(f"Persona {id} no existe")
 
-        # Update campos simples
-        existing.dni = persona.dni
-        existing.nombre = persona.nombre
-        existing.apellido = persona.apellido
-        existing.extranjero = persona.extranjero
-        existing.family_owner = persona.family_owner
-        existing.cargado_en_caritas = persona.cargado_en_caritas
-        existing.descripcion = persona.descripcion
+        map_model_to_orm(
+            persona,
+            existing,
+            exclude_fields={"ubicacion", "grupo_familiar"},
+        )
 
-        # Ubicacion (overwrite)
-        if existing.ubicacion:
-            existing.ubicacion.direccion = persona.ubicacion.direccion
-            existing.ubicacion.localidad = persona.ubicacion.localidad
-        else:
-            existing.ubicacion = UbicacionDim.from_domain(persona.ubicacion)
+        # Relaciones
+        if persona.ubicacion:
+            if existing.ubicacion is None:
+                existing.ubicacion = UbicacionDim()
 
-        # Grupo familiar (overwrite completo)
+            map_model_to_orm(persona.ubicacion, existing.ubicacion)
+
         if persona.grupo_familiar:
-            if not persona.family_owner:
-                raise ValueError("Solo family_owner puede tener grupo familiar")
+            if existing.grupo_familiar is None:
+                existing.grupo_familiar = GrupoFamiliarDim()
 
-            existing.grupo_familiar = GrupoFamiliarDim.from_domain(
-                persona.grupo_familiar
-            )
-        else:
-            existing.grupo_familiar = None
+            map_model_to_orm(persona.grupo_familiar, existing.grupo_familiar)
 
         self.db.flush()
-        self.db.refresh(existing)
-
         return existing.to_domain()
 
     def delete(self, id: int) -> None:
