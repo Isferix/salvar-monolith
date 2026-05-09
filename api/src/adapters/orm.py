@@ -7,22 +7,20 @@ from core.pydantic.common import (
     FamiliarTipo,
     GrupoFamiliar,
     Ubicacion,
+    familiar_adapter,
 )
 from core.pydantic.ports import Persona
-from pydantic import TypeAdapter
 from sqlalchemy import (
     JSON,
     Enum,
     ForeignKey,
     MetaData,
-    inspect,
     select,
 )
-
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Mapped, Session, mapped_column, relationship
 
-from ..utils.mappers import map_model_to_orm, map_orm_to_model
+from ..utils.mappers import map_model_to_orm
 
 NAMING_CONVENTION = {
     "ix": "ix_%(column_0_label)s",
@@ -34,8 +32,6 @@ NAMING_CONVENTION = {
 
 
 Base = declarative_base(metadata=MetaData(naming_convention=NAMING_CONVENTION))
-
-familiar_adapter = TypeAdapter(Familiar)
 
 
 class PersonaDAO(Base):
@@ -78,14 +74,7 @@ class PersonaDAO(Base):
         )
 
     def to_domain(self) -> Persona:
-        return map_orm_to_model(
-            self,
-            Persona,
-            ubicacion=self.ubicacion.to_domain() if self.ubicacion else Ubicacion(),
-            grupo_familiar=self.grupo_familiar.to_domain()
-            if self.grupo_familiar
-            else None,
-        )
+        return Persona.model_validate(self)
 
 
 class UbicacionDim(Base):
@@ -142,11 +131,7 @@ class GrupoFamiliarDim(Base):
         return instance
 
     def to_domain(self) -> GrupoFamiliar:
-        return GrupoFamiliar(
-            id=self.id,
-            cantidad=self.cantidad,
-            familiares=[miembro.to_domain() for miembro in self.miembros],
-        )
+        return GrupoFamiliar.model_validate(self)
 
 
 class MiembroGrupoFamiliar(Base):
@@ -183,11 +168,7 @@ class MiembroGrupoFamiliar(Base):
         )
 
     def to_domain(self) -> Familiar:
-        # Extrae solo las columnas mapeadas en un dict
-        mapper = inspect(self).mapper
-        data = {c.key: getattr(self, c.key) for c in mapper.column_attrs}
-
-        return familiar_adapter.validate_python(data)
+        return familiar_adapter.validate_python(self)
 
 
 class SqlAlchemyPersonasRepository:
