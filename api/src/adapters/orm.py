@@ -18,6 +18,7 @@ from sqlalchemy import (
     inspect,
     select,
 )
+
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Mapped, Session, mapped_column, relationship
 
