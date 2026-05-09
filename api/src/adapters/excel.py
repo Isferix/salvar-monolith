@@ -1,17 +1,16 @@
 from pathlib import Path
 from typing import List
 
-from openpyxl import Workbook, load_workbook
-from openpyxl.styles import Alignment, Border, Font, Side
-
-from core.common import (
+from core.pydantic.common import (
     FamiliarCargado,
     FamiliarDesconocido,
     FamiliarRelacion,
     Ubicacion,
 )
-from core.models import GrupoFamiliar, Persona
-from core.ports import PersonasSerializer, name_resolver, saver
+from core.pydantic.models import GrupoFamiliar, Persona
+from core.pydantic.ports import PersonasSerializer, name_resolver, saver
+from openpyxl import Workbook, load_workbook
+from openpyxl.styles import Alignment, Border, Font, Side
 
 
 class ExcelSerializer(PersonasSerializer):
