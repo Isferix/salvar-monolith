@@ -25,7 +25,6 @@
       },
       "extensions": [
         "ms-python.python",
-        "wholroyd.jinja",
         "ms-python.debugpy",
         "mouradghafiri.uv-vscode-extension",
         "charliermarsh.ruff",
