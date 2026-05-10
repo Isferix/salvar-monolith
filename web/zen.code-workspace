@@ -18,6 +18,7 @@
       "package.json": true,
       "pnpm-lock.yaml": true,
       "pnpm-workspace.yaml": true,
+      "zen.code-workspace": true
     },
   },
 }

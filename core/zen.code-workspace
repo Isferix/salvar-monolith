@@ -21,7 +21,8 @@
       "dev.sh": true,
       "Dockerfile": true,
       "Makefile": true,
-      "uv.lock": true
+      "uv.lock": true,
+      "zen.code-workspace": true
     }
   }
 }

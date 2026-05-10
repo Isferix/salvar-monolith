@@ -21,7 +21,6 @@
       "Dockerfile": true,
       "Makefile": true,
       "pyproject.toml": true,
-      "README.md": true,
       "uv.lock": true,
 
       // "web": true
