@@ -771,14 +771,6 @@ wheels = [
 ]
 
 [[package]]
-name = "salvar-core"
-version = "0.5.1"
-source = { git = "ssh://git@github.com/Isferix/salvar-core.git?rev=v0.5.1#9d8ce52be776fd495b2c75bda82e4e03cd9e70e8" }
-dependencies = [
-    { name = "pydantic" },
-]
-
-[[package]]
 name = "salvar-monolith"
 version = "0.1.0"
 source = { virtual = "." }
@@ -787,7 +779,6 @@ dependencies = [
     { name = "fastapi", extra = ["standard"] },
     { name = "openpyxl" },
     { name = "pydantic-settings" },
-    { name = "salvar-core" },
     { name = "sqlalchemy" },
 ]
 
@@ -804,7 +795,6 @@ requires-dist = [
     { name = "fastapi", extras = ["standard"], specifier = ">=0.136.1" },
     { name = "openpyxl", specifier = ">=3.1.5" },
     { name = "pydantic-settings", specifier = ">=2.14.0" },
-    { name = "salvar-core", git = "ssh://git@github.com/Isferix/salvar-core.git?rev=v0.5.1" },
     { name = "sqlalchemy", specifier = ">=2.0.49" },
 ]
 
