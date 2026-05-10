@@ -9,7 +9,8 @@
         <th scope="col">#</th>
         <th scope="col">Nombre</th>
         <th scope="col">Apellido</th>
-        <th scope="col">Email</th>
+        <th scope="col">DNI</th>
+        <th scope="col">Descripcion</th>
       </tr>
     </thead>
     <tbody>
@@ -18,7 +19,8 @@
         <th scope="row">{{ persona.id }}</th>
         <td>{{ persona.nombre }}</td>
         <td>{{ persona.apellido }}</td>
-        <td>{{ persona.email }}</td>
+        <td>{{ persona.dni or "N/A" }}</td>
+        <td>{{ persona.descripcion }}</td>
       </tr>
       {% endfor %}
     </tbody>
