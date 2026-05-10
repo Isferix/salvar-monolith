@@ -14,3 +14,18 @@ async def home(request: Request) -> HTMLResponse:
 @web.get("/index")
 async def index(request: Request) -> HTMLResponse:
     return render(request, template="index")
+
+
+@web.get("/carga")
+async def carga(request: Request) -> HTMLResponse:
+    return render(request, template="pages/carga")
+
+
+@web.get("/tabla")
+async def tabla(request: Request) -> HTMLResponse:
+    return render(request, template="pages/tabla")
+
+
+@web.get("/informes")
+async def informes(request: Request) -> HTMLResponse:
+    return render(request, template="pages/informes")
