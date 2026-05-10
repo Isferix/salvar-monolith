@@ -44,6 +44,7 @@ services:
       - ../api/pyproject.toml:/code/pyproject.toml
       - ../api/uv.lock:/code/uv.lock
       - ../web:/code/web
+      - ../core/src:/code/core
     labels:
       - traefik.enable=true
       - traefik.http.routers.api.rule=PathPrefix(`/static`) || PathPrefix(`/components`) || PathPrefix(`/`)
