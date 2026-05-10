@@ -11,6 +11,7 @@
       "**/*.pyc": true,
       "**/*.gitignore": true,
       "**/*__init__.py": true,
+      ".devcontainer/": true,
       ".github/": true,
       ".vscode/": true,
       ".pytest_cache": true,
@@ -20,7 +21,6 @@
       "dist": true,
       "dev.sh": true,
       "Dockerfile": true,
-      "Makefile": true,
       "uv.lock": true,
       "zen.code-workspace": true
     }
