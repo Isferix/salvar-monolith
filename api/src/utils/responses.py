@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Optional
 
 from fastapi.requests import Request
 from fastapi.responses import HTMLResponse, JSONResponse
@@ -17,30 +17,33 @@ def custom_response(status: int, data: Optional[dict] = None) -> JSONResponse:
 
 
 def renderBase(request: Request) -> HTMLResponse:
-    html_content = templates.TemplateResponse(
+    return templates.TemplateResponse(
         request=request, name="base.html", context={"request": request}
-    ).body.decode("utf-8")  # type: ignore
-    return HTMLResponse(content=html_content)
+    )
 
 
-def render(
+def renderTemplate(
     request: Request,
     template: str = "index",
     partial: bool = False,
-    data: dict = {},
-    **kwargs,
+    data: dict[str, Any] | None = None,
 ) -> HTMLResponse:
     isHx: str | None = request.headers.get("HX-Request")
-    context = {**data, **kwargs}
+
+    context = {
+        "request": request,
+        **(data or {}),
+    }
+
     if isHx or partial:
-        html_content = templates.TemplateResponse(
+        response = templates.TemplateResponse(
             request=request, name=f"{template}.html", context=context
-        ).body.decode("utf-8")  # type: ignore
+        )
     else:
-        page = f"{template}.html"
-        html_content = templates.TemplateResponse(
-            request=request,
-            name="base.html",
-            context={**context, "page": page},
-        ).body.decode("utf-8")  # type: ignore
-    return HTMLResponse(content=html_content)
+        context["page"] = f"{template}.html"
+
+        response = templates.TemplateResponse(
+            request=request, name="base.html", context=context
+        )
+
+    return HTMLResponse(content=response.body, status_code=response.status_code)
