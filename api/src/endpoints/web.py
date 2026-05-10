@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 
-from ..utils.responses import render, renderBase
+from ..utils.responses import renderBase, renderTemplate
 from .dependencies import personas_dependency
 
 web = APIRouter()
@@ -14,21 +14,25 @@ async def home(request: Request) -> HTMLResponse:
 
 @web.get("/index")
 async def index(request: Request) -> HTMLResponse:
-    return render(request, template="index")
+    return renderTemplate(request, data={}, template="index")
 
 
 @web.get("/carga")
-async def carga(request: Request, personas: personas_dependency) -> HTMLResponse:
-    return render(
-        request, template="pages/carga", data={"personas": personas.get_all_personas()}
-    )
+async def carga(request: Request) -> HTMLResponse:
+    return renderTemplate(request, template="pages/carga")
 
 
 @web.get("/tabla")
-async def tabla(request: Request) -> HTMLResponse:
-    return render(request, template="pages/tabla")
+async def tabla(request: Request, personas: personas_dependency) -> HTMLResponse:
+    data_personas = personas.get_all_personas()
+    payload = {"personas": data_personas}
+    return renderTemplate(
+        request,
+        template="pages/tabla",
+        data=payload,
+    )
 
 
 @web.get("/informes")
 async def informes(request: Request) -> HTMLResponse:
-    return render(request, template="pages/informes")
+    return renderTemplate(request, template="pages/informes")
