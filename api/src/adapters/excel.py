@@ -57,7 +57,6 @@ class ExcelSerializer(PersonasSerializer):
         grupo = GrupoFamiliar(
             familiares=familiares,
         )
-        grupo.normalizar()
 
         return grupo
 
@@ -152,6 +151,8 @@ class ExcelSerializer(PersonasSerializer):
         wb: Workbook = Workbook()
         ws = wb.active
         ws.title = "Personas"
+        if ws is None:
+            raise ValueError("No se pudo crear la hoja de Excel")
 
         bold_font = Font(bold=True)
         thin = Side(style="medium")
