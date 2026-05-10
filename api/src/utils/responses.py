@@ -26,12 +26,13 @@ def renderBase(request: Request) -> HTMLResponse:
 def render(
     request: Request,
     template: str = "index",
+    partial: bool = False,
     data: dict = {},
     **kwargs,
 ) -> HTMLResponse:
     isHx: str | None = request.headers.get("HX-Request")
     context = {**data, **kwargs}
-    if isHx:
+    if isHx or partial:
         html_content = templates.TemplateResponse(
             request=request, name=f"{template}.html", context=context
         ).body.decode("utf-8")  # type: ignore
