@@ -180,7 +180,7 @@ class SqlAlchemyPersonasRepository(PersonasRepository):
 
         self.db.add(dao)
         self.db.flush()
-        self.db.refresh(dao)
+        self.db.commit()
 
         return dao.to_domain()
 
