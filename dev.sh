@@ -12,5 +12,6 @@ make up
 echo "🧠 Abriendo VS Code..."
 
 code .
-code api/api_zen.code-workspace
-code web/web_zen.code-workspace
+code core/zen.code-workspace
+code api/zen.code-workspace
+code web/zen.code-workspace
