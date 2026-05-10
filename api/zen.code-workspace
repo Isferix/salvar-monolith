@@ -22,8 +22,7 @@
       "Makefile": true,
       "pyproject.toml": true,
       "uv.lock": true,
-
-      // "web": true
+      "web": true
     }
   }
 }
