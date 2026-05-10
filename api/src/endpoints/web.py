@@ -34,9 +34,10 @@ async def index(request: Request) -> HTMLResponse:
 
 
 @web.get("/carga")
-async def carga(request: Request) -> HTMLResponse:
-    return render(request, template="pages/carga")
-
+async def carga(request: Request, personas: personas_dependency) -> HTMLResponse:
+    return render(
+        request, template="pages/carga", data={"personas": personas.get_all_personas()}
+    )
 
 @web.get("/tabla")
 async def tabla(request: Request) -> HTMLResponse:
