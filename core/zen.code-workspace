@@ -1,0 +1,27 @@
+{
+  "folders": [
+    { "path": "." }
+  ],
+  "settings": {
+    "breadcrumbs.enabled": false,
+    "editor.minimap.enabled": false,
+
+    "files.exclude": {
+      "**/__pycache__": true,
+      "**/*.pyc": true,
+      "**/*.gitignore": true,
+      "**/*__init__.py": true,
+      ".github/": true,
+      ".vscode/": true,
+      ".pytest_cache": true,
+      ".ruff_cache": true,
+      ".gitignore": true,
+      ".python-version": true,
+      "dist": true,
+      "dev.sh": true,
+      "Dockerfile": true,
+      "Makefile": true,
+      "uv.lock": true
+    }
+  }
+}

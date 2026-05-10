@@ -1,0 +1,31 @@
+{
+  "name": "Dev Python + UV",
+  "build": {
+    "dockerfile": "../Dockerfile"
+  },
+  "workspaceFolder": "/workspaces",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces,type=bind",
+
+  "mounts": [
+    "source=venv-${localWorkspaceFolderBasename}-volume,target=/opt/venv,type=volume",
+    "source=uv-global-cache,target=/home/vscode/.cache/uv,type=volume"
+  ],
+  "postCreateCommand": "uv sync --all-groups --frozen --active",
+  "shutdownAction": "none",
+  "updateRemoteUserUID": true,
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "python.defaultInterpreterPath": "/opt/venv/bin/python3.13",
+        "python.analysis.extraPaths": ["/workspaces"]
+      },
+      "extensions": [
+        "ms-python.python",
+        "ms-python.debugpy",
+        "mouradghafiri.uv-vscode-extension",
+        "charliermarsh.ruff"
+      ]
+    }
+  }
+}
