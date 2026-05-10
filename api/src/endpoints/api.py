@@ -1,8 +1,9 @@
 from typing import Literal
 
-from core.pydantic.models import Persona
 from fastapi import APIRouter, Response
 from pydantic import BaseModel
+
+from core.pydantic.models import Persona
 
 from .dependencies import personas_dependency, serializer_dependency
 

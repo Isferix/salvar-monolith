@@ -1,5 +1,15 @@
 from typing import Self
 
+from sqlalchemy import (
+    JSON,
+    Enum,
+    ForeignKey,
+    MetaData,
+    select,
+)
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import Mapped, Session, mapped_column, relationship
+
 from core.pydantic.common import (
     Familiar,
     FamiliarCargado,
@@ -10,15 +20,6 @@ from core.pydantic.common import (
     familiar_adapter,
 )
 from core.pydantic.ports import Persona, PersonasRepository
-from sqlalchemy import (
-    JSON,
-    Enum,
-    ForeignKey,
-    MetaData,
-    select,
-)
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import Mapped, Session, mapped_column, relationship
 
 from ...utils.mappers import map_model_to_orm
 
