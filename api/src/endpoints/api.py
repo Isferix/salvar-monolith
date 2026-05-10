@@ -1,9 +1,10 @@
 from typing import Literal
 
+from core.pydantic.models import Persona
 from fastapi import APIRouter, Response
 from pydantic import BaseModel
 
-from .dependencies import serializer_dependency
+from .dependencies import personas_dependency, serializer_dependency
 
 api = APIRouter()
 
@@ -22,6 +23,11 @@ class ImportQuery(BaseModel):
 
 class ExportQuery(BaseModel):
     serializer: Literal["excel"] = "excel"
+
+
+@api.get("/personas")
+async def get_personas(personas: personas_dependency) -> list[Persona]:
+    return personas.get_all_personas()
 
 
 @api.put("/serializer/import")
