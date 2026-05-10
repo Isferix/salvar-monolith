@@ -42,7 +42,7 @@ down:
 
 rebuild: compile
 	devcontainer build --workspace-folder $(API_WORKSPACE) --no-cache
-	devcontainer build --workspace-folder $(WEB_WORKSPACE) --no-cache
+# 	devcontainer build --workspace-folder $(WEB_WORKSPACE) --no-cache
 	$(MAKE) up
 
 logs:
