@@ -2,4 +2,24 @@
 
 <h2>Tabla</h2>
 
-<div class="row mt-4"></div>
+<div class="row mt-4">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Apellido</th>
+                <th scope="col">Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for persona in personas %}
+            <tr>
+                <th scope="row">{{ persona.id }}</th>
+                <td>{{ persona.nombre }}</td>
+                <td>{{ persona.apellido }}</td>
+                <td>{{ persona.email }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>    
+</div>
