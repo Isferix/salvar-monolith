@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
-from .endpoints.api import api
-from .endpoints.web import web
 from .infrastructure.jinja import templates
+from .interface.rest import rest
+from .interface.web import web
 from .settings import get_settings
 from .utils.extra import reload_templates
 
@@ -15,7 +15,7 @@ if is_dev:
     from fastapi.concurrency import asynccontextmanager
 
     hot_reload = arel.HotReload(
-        paths=[arel.Path("./web/src", on_reload=[reload_templates])]
+        paths=[arel.Path("./web", on_reload=[reload_templates])]
     )
     templates.env.auto_reload = True
     templates.env.globals["hot_reload"] = hot_reload
@@ -43,5 +43,5 @@ server.mount(
     StaticFiles(directory="web/components"),
     name="components",
 )
-server.include_router(api, prefix="/api")
+server.include_router(rest)
 server.include_router(web)
