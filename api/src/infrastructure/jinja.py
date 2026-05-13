@@ -7,7 +7,7 @@ from ..settings import get_settings
 settings = get_settings()
 is_dev = settings.env == "development"
 
-templates = Jinja2Templates(directory="web/src")
+templates = Jinja2Templates(directory="web")
 templates.env.globals["year"] = 2026
 templates.env.globals["is_dev"] = is_dev
 

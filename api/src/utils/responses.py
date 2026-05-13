@@ -18,7 +18,7 @@ def custom_response(status: int, data: Optional[dict] = None) -> JSONResponse:
 
 def renderBase(request: Request) -> HTMLResponse:
     return templates.TemplateResponse(
-        request=request, name="base.html", context={"request": request}
+        request=request, name="src/base.html", context={"request": request}
     )
 
 
@@ -43,7 +43,7 @@ def renderTemplate(
         context["page"] = f"{template}.html"
 
         response = templates.TemplateResponse(
-            request=request, name="base.html", context=context
+            request=request, name="src/base.html", context=context
         )
 
     return HTMLResponse(content=response.body, status_code=response.status_code)
