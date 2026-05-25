@@ -2,7 +2,7 @@ from functools import lru_cache
 
 from fastapi.templating import Jinja2Templates
 
-from ..settings import get_settings
+from settings import get_settings
 
 settings = get_settings()
 is_dev = settings.env == "development"

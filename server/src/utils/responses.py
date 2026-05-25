@@ -3,7 +3,7 @@ from typing import Any, Optional
 from fastapi.requests import Request
 from fastapi.responses import HTMLResponse, JSONResponse
 
-from ..dependencies import templates
+from dependencies import templates
 
 
 def custom_response(status: int, data: Optional[dict] = None) -> JSONResponse:

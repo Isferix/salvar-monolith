@@ -1,4 +1,4 @@
-from ..dependencies import logger, templates
+from dependencies import logger, templates
 
 
 async def reload_templates():

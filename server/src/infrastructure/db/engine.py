@@ -1,9 +1,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from src.adapters.repos.sqlalchemy import Base
+from ...adapters.repos.sqlalchemy import Base
 
-from ...settings import get_settings
+from settings import get_settings
 
 settings = get_settings()
 
