@@ -1,7 +1,7 @@
 {
-  "name": "API salvar-dev",
+  "name": "SERVER salvar-dev",
   "dockerComposeFile": ["../../.deploy/docker-compose.dev.yml"],
-  "service": "api",
+  "service": "server",
   "workspaceFolder": "/code",
   "shutdownAction": "none",
   "updateRemoteUserUID": true,  

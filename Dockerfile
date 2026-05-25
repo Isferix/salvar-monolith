@@ -25,7 +25,7 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 RUN mkdir -p -m 0700 ~/.ssh && \
     ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-    COPY ./api/pyproject.toml ./api/uv.lock ./
+    COPY ./server/pyproject.toml ./server/uv.lock ./
 RUN --mount=type=ssh uv sync --no-dev --frozen --no-cache
 RUN uv pip install "psycopg[binary]"
 
@@ -36,14 +36,14 @@ RUN useradd -m -s /bin/sh vscode
 ENV UV_LINK_MODE=copy
 ENV UV_CACHE_DIR=/home/vscode/.cache/uv
 
-COPY --chown=vscode:vscode ./api ./
+COPY --chown=vscode:vscode ./server ./
 
 RUN mkdir -p /home/vscode/.cache/uv 
 RUN chown -R vscode:vscode /opt/venv /code /home/vscode/.cache/uv
 USER vscode
 
 EXPOSE 8000
-CMD ["uv", "run", "uvicorn", "src.main:server", "--host", "0.0.0.0", "--reload", "--proxy-headers", "--forwarded-allow-ips", "*"]
+CMD ["uv", "run", "uvicorn", "main:server", "--host", "0.0.0.0", "--reload", "--proxy-headers", "--forwarded-allow-ips", "*"]
 # CMD ["sleep", "infinity"]
 
 # ---------- RUNTIME (PROD) ----------
@@ -57,5 +57,5 @@ COPY --chown=appuser:appuser ./web /code/web
 
 USER appuser
 EXPOSE 8000
-CMD ["uvicorn", "src.main:server", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers", "--forwarded-allow-ips","*"]
+CMD ["uvicorn", "main:server", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers", "--forwarded-allow-ips","*"]
 # CMD ["sleep", "infinity"]
